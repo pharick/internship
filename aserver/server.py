@@ -16,7 +16,7 @@ def start_app():
         web.get('/', handle_request),
     ])
 
-    web.run_app(app)
+    web.run_app(app, port=80)
 
 
 if __name__ == '__main__':
