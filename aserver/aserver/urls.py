@@ -1,6 +1,6 @@
 from aiohttp import web
 
-from . import views
+from aserver import views
 
 urls = [
     web.get('/', views.index),

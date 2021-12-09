@@ -1,21 +1,24 @@
-import asyncio
+import time
 
 import pytest
 
-from aserver.application import Application
+from aserver.start_server import get_app
 from .storm import storm
 
 
 class TestServer:
     @pytest.fixture
-    async def app_address(self, aiohttp_unused_port):
-        port = aiohttp_unused_port()
-        app = Application()
-        address = await app.app_start('127.0.0.1', port)
-        yield address
-        await app.app_stop()
+    async def app_address(self, aiohttp_server, aiohttp_unused_port):
+        app = get_app()
+        server = await aiohttp_server(app, port=aiohttp_unused_port())
+        server.start_server()
+        yield f'http://{server.host}:{server.port}'
+        server.close()
 
     @pytest.mark.asyncio
-    async def test_storm(self, app_address, aiohttp_client):
+    async def test_storm(self, app_address):
+        start = time.time()
         success_count = await storm(app_address, 1000)
+        estimate = time.time() - start
         assert success_count == 1000
+        assert estimate <= 10

@@ -1,24 +1,18 @@
-import asyncio
+from aiohttp import web
 
-from application import Application
+from aserver.urls import urls
 
 
-def start_app(port=80):
-    loop = asyncio.get_event_loop()
-    app = Application()
-    address = loop.run_until_complete(app.app_start('0.0.0.0', port))
+def get_app():
+    app = web.Application()
+    app.add_routes(urls)
+    return app
 
-    print(f'Application is running on {address}')
 
-    try:
-        loop.run_forever()
-    except KeyboardInterrupt:
-        pass
-
-    print('Application is stopping...')
-    loop.run_until_complete(app.app_stop())
-    loop.close()
+def main(port=80):
+    app = get_app()
+    web.run_app(app, port=port)
 
 
 if __name__ == '__main__':
-    start_app()
+    main()
