@@ -11,9 +11,9 @@ class TestServer:
     async def app_address(self, aiohttp_server, aiohttp_unused_port):
         app = get_app()
         server = await aiohttp_server(app, port=aiohttp_unused_port())
-        server.start_server()
+        await server.start_server()
         yield f'http://{server.host}:{server.port}'
-        server.close()
+        await server.close()
 
     @pytest.mark.asyncio
     async def test_storm(self, app_address):
