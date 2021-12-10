@@ -4,7 +4,7 @@ from subprocess import call, check_output
 
 def get_commit_list():
     commits = check_output(
-        f'git log --oneline',
+        'git log --oneline',
         shell=True, encoding='utf-8'
     )
     commits = commits.strip().split('\n')
@@ -19,7 +19,7 @@ def git_reverse(dirname, new_dirname):
 
     mkdir(new_dirname)
     chdir(new_dirname)
-    call(f'git init', shell=True)
+    call('git init', shell=True)
     chdir('..')
 
     for commit in commits:
@@ -39,7 +39,7 @@ def git_reverse(dirname, new_dirname):
         )
 
         chdir(new_dirname)
-        call(f'git add -A', shell=True)
+        call('git add -A', shell=True)
         call(f'git commit -m "{message}"', shell=True)
         chdir('..')
 
