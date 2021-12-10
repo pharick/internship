@@ -40,10 +40,10 @@ def write_file(filename):
         f.write(content)
 
 
-def generate_repo(commits=10):
-    rmtree('repo', ignore_errors=True)
-    mkdir('repo')
-    chdir('repo')
+def generate_repo(dirname, commits=10):
+    rmtree(dirname, ignore_errors=True)
+    mkdir(dirname)
+    chdir(dirname)
     call('git init', shell=True)
 
     messages = asyncio.run(get_commit_messages(commits))
@@ -57,4 +57,4 @@ def generate_repo(commits=10):
 
 
 if __name__ == '__main__':
-    generate_repo()
+    generate_repo('repo')
