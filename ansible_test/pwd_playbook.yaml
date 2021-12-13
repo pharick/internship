@@ -1,0 +1,10 @@
+---
+- name: pwd playbook
+  hosts: localhost
+  tasks:
+    - name: Printing working directory
+      command: "pwd"
+      register: working_directory
+    - debug:
+        msg: "Working directory: {{ working_directory.stdout }}"
+  
