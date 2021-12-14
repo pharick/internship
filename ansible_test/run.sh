@@ -1,3 +1,3 @@
-#!/usr/sh
+#!/bin/sh
 
-ansible-playbook -i hosts -c local pwd_playbook.yaml
+ansible-playbook -i hosts pwd_playbook.yaml
