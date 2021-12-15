@@ -1,3 +1,3 @@
 #!/bin/sh
 
-ansible-playbook -i hosts pwd_playbook.yaml
+ansible-playbook -i hosts pwd_playbook.yml

@@ -1,0 +1,41 @@
+---
+- name: Get hosts
+  shell: hostname
+  register: hostname
+
+- name: Get unique hosts
+  loop: "{{ hostvars | dict2items }}"
+  when: "item.value.hostname.stdout not in unique_hosts | default({})"
+  loop_control:
+    label: "{{ item.key }}"
+  run_once: true
+  delegate_to: localhost
+  set_fact:
+    unique_hosts: "{{ unique_hosts | default({}) | combine({item.value.hostname.stdout: item.value.inventory_hostname}) }}"
+
+- name: Print unique hostnames
+  loop: "{{ unique_hosts | dict2items }}"
+  run_once: true
+  delegate_to: localhost
+  debug:
+    msg: "{{ item.key }} - {{ item.value }}"
+
+
+- name: Get working directories
+  loop: "{{ unique_hosts | dict2items }}"
+  run_once: true
+  delegate_to: "{{ item.value }}"
+  my_shell:
+    command: "ls"
+    workdir: "/"
+  register: working_directory
+  
+
+- name: Print working directories
+  loop: "{{ hostvars['localhost'].working_directory.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  run_once: true
+  delegate_to: localhost
+  debug:
+    msg: "{{ item }}"
